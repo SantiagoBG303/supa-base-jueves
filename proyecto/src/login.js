@@ -1,73 +1,46 @@
 // src/login.js
 import { supabase } from './supabase.js';
-import { mostrarRegistro } from './register.js'; // para poder ir al registro
-
+import { cargarMenu } from './main.js';
+import { mostrarMVP } from './mvp.js';
 
 export function mostrarLogin() {
- const app = document.getElementById('app');
- app.innerHTML = `
-   <section>
-     <h2>Iniciar Sesión</h2>
-     <form id="login-form">
-       <input type="email" name="correo" placeholder="Correo" required />
-       <input type="password" name="password" placeholder="Contraseña" required />
-       <button type="submit">Ingresar</button>
-     </form>
-     <p id="error" style="color:red;"></p>
-   </section>
- `;
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <section>
+      <h2>Iniciar Sesión</h2>
+      <form id="login-form">
+        <input type="email" name="correo" placeholder="Correo" required />
+        <input type="password" name="password" placeholder="Contraseña" required />
+        <button type="submit">Ingresar</button>
+      </form>
+      <p id="mensaje" style="text-align:center;color:red;"></p>
+    </section>
+  `;
 
+  const form = document.getElementById('login-form');
+  const mensaje = document.getElementById('mensaje');
 
- const form = document.getElementById('login-form');
- const errorMsg = document.getElementById('error');
- const irRegistro = document.getElementById('ir-registro');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    mensaje.textContent = 'Verificando...';
 
+    const correo = form.correo.value.trim();
+    const password = form.password.value.trim();
 
- // Ir al registro
- irRegistro.addEventListener('click', () => {
-   mostrarRegistro();
- });
+    const { error } = await supabase.auth.signInWithPassword({
+      email: correo,
+      password: password,
+    });
 
+    if (error) {
+      mensaje.textContent = '❌ Credenciales inválidas.';
+      return;
+    }
 
- // Enviar login
- form.addEventListener('submit', async (e) => {
-   errorMsg.textContent = '';
-   e.preventDefault();
-   const correo = form.correo.value.trim();
-   const password = form.password.value.trim();
+    mensaje.style.color = 'green';
+    mensaje.textContent = '✅ Sesión iniciada correctamente.';
 
-
-   if (!correo || !password) {
-     errorMsg.textContent = 'Por favor completa todos los campos.';
-     return;
-   }
-
-
-   // 🔐 Iniciar sesión en Supabase
-   const { data, error } = await supabase.auth.signInWithPassword({
-     email: correo,
-     password: password,
-   });
-
-
-   if (error) {
-     errorMsg.textContent = 'Error al iniciar sesión: ' + error.message;
-     return;
-   }
-
-
-   // ✅ Usuario autenticado
-   const usuario = data.user;
-   console.log('Usuario logueado:', usuario);
-
-
-   // Ejemplo de redirección según el correo
-   if (usuario.email === 'daniel.diazd@uniagustiniana.edu.co') {
-     alert('Bienvenido, administrador');
-     // mostrarAdmin(); // cuando tengas admin.js
-   } else {
-     alert('Bienvenido, estudiante');
-     // mostrarUser(); // cuando tengas user.js
-   }
- });
+    await cargarMenu();
+    mostrarMVP();
+  });
 }

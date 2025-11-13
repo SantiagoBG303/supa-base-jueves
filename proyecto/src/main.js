@@ -1,13 +1,54 @@
-// main.js
+import { mostrarRegistro } from './register.js';
+import { mostrarLogin } from './login.js';
+import { mostrarMVP } from './mvp.js';
+import { mostrarUser } from './user.js';
+import { mostrarAdmin } from './admin.js';
+import { supabase } from './supabase.js';
 
-// 1️⃣ Importa la función desde registro.js
-import { mostrarRegistro } from './registro.js';
+const routes = {
+  'registro': mostrarRegistro,
+  'login': mostrarLogin,
+  'actividades': mostrarMVP,
+  'usuarios': mostrarUser,
+  'admin': mostrarAdmin,
+};
 
-// Si tienes otras funciones de vistas, impórtalas también:
-// import { mostrarInicioSesion } from './login.js';
+async function CerrarSesion() {
+  await supabase.auth.signOut();
+  await cargarMenu();
+  mostrarRegistro();
+}
 
-// 2️⃣ Llama a la función para que se muestre el formulario al cargar la app
-mostrarRegistro(); 
+export async function cargarMenu() {
+  const menu = document.getElementById('menu');
+  const { data: { user } } = await supabase.auth.getUser();
 
-// Nota: Dependiendo de tu lógica de enrutamiento, puede que necesites 
-// llamar a esta función dentro de un listener o función de inicio.
+  if (!user) {
+    menu.innerHTML = `
+      <div>
+        <button data-action="registro">Registrarse</button>
+        <button data-action="login">Iniciar sesión</button>
+      </div>
+    `;
+  } else {
+    menu.innerHTML = `
+      <div>
+        <button data-action="actividades">Actividades</button>
+        <button data-action="usuarios">Usuarios</button>
+        <button data-action="logout">Cerrar sesión</button>
+        ${user.email === 'admin@mail.com' ? '<button data-action="admin">Admin</button>' : ''}
+      </div>
+    `;
+  }
+
+  menu.querySelectorAll('button').forEach(button => {
+    const action = button.getAttribute('data-action');
+    if (action === 'logout') {
+      button.addEventListener('click', CerrarSesion);
+    } else if (routes[action]) {
+      button.addEventListener('click', routes[action]);
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', cargarMenu);

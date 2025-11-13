@@ -1,0 +1,246 @@
+/* === MODO CHIMBO FUTURISTA === */
+/* Inspirado en neones, humo digital y beats electrónicos */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: radial-gradient(circle at 20% 20%, #1e1e2f, #0a0a0f 80%);
+  color: #e5e7eb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px;
+  overflow-x: hidden;
+}
+
+/* Contenedor principal con efecto de vidrio */
+#app {
+  width: 100%;
+  max-width: 950px;
+  backdrop-filter: blur(12px);
+  background: rgba(30, 30, 50, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 200, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  min-height: 450px;
+}
+
+/* Menú con glow */
+#menu {
+  width: 100%;
+  max-width: 950px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+#menu button {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+#menu button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: skewX(-45deg);
+  transition: left 0.5s ease;
+}
+
+#menu button:hover::before {
+  left: 200%;
+}
+
+#menu button:hover {
+  transform: scale(1.05) rotate(-1deg);
+  box-shadow: 0 0 25px rgba(0, 200, 255, 0.7);
+}
+
+/* Títulos */
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #00d9ff;
+  text-shadow: 0 0 10px #00d9ff;
+  margin-bottom: 25px;
+}
+
+h3 {
+  color: #5eead4;
+  font-weight: 600;
+  margin-top: 30px;
+  border-bottom: 2px solid #5eead4;
+  padding-bottom: 5px;
+}
+
+/* Formularios */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, textarea, select {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #00c6ff;
+  box-shadow: 0 0 10px #00c6ff;
+}
+
+/* Botones de acción */
+button[type="submit"], #guardar-notas {
+  background: linear-gradient(90deg, #7c3aed, #00d9ff);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+button[type="submit"]:hover, #guardar-notas:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.7);
+}
+
+/* Listas con efecto neón */
+#lista-estudiantes > div,
+#lista-actividades > div {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid #00d9ff;
+  padding: 15px 20px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #e5e7eb;
+}
+
+.eliminar-estudiante {
+  background-color: #ff005c;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 0, 92, 0.6);
+}
+
+.eliminar-estudiante:hover {
+  background-color: #d0004a;
+  transform: scale(1.1);
+}
+
+/* Inputs de notas */
+.nota-input {
+  width: 80px;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(0,217,255,0.3);
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.nota-input:focus {
+  border-color: #00d9ff;
+  box-shadow: 0 0 10px #00d9ff;
+}
+
+/* Animación de entrada suave */
+#app {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  #menu {
+    flex-direction: column;
+  }
+  #menu button {
+    width: 100%;
+  }
+  #app {
+    padding: 20px;
+  }
+}
+
+
+
+
+
+/* Imagen inicial dentro del #app */
+#imagen-inicial {
+  display: block;
+  margin: 40px auto;
+  max-width: 85%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(0, 217, 255, 0.35),
+              0 0 40px rgba(124, 58, 237, 0.2);
+  animation: aparecerSuave 1s ease-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto hover: se levanta con glow */
+#imagen-inicial:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 35px rgba(0, 217, 255, 0.5),
+              0 0 60px rgba(124, 58, 237, 0.4);
+}
+
+/* Animación de entrada */
+@keyframes aparecerSuave {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+

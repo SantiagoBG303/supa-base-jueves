@@ -1,5 +1,6 @@
 // src/registro.js
 import { supabase } from './supabase.js';
+import { mostrarLogin } from './login.js';
 
 export function mostrarRegistro() {
   const app = document.getElementById('app');
@@ -14,6 +15,7 @@ export function mostrarRegistro() {
         <button type="submit">Registrarse</button>
       </form>
       <p id="error" style="color:red;"></p>
+      <p>¿Ya tienes cuenta? <button id="ir-login" style="background:none;border:none;color:blue;cursor:pointer;">Iniciar sesión</button></p>
     </section>
   `;
 
@@ -22,8 +24,7 @@ export function mostrarRegistro() {
   const irLogin = document.getElementById('ir-login');
 
   irLogin.addEventListener('click', () => {
-    alert('👉 Aquí se llamará mostrarLogin() cuando esté listo');
-    // mostrarLogin(); // descomenta cuando exista
+    mostrarLogin();
   });
 
   form.addEventListener('submit', async (e) => {
@@ -35,12 +36,11 @@ export function mostrarRegistro() {
     const password = form.password.value.trim();
     const telefono = form.telefono.value.trim();
 
-    if (!nombre || !correo || !password) {
+    if (!nombre || !correo || !password || !telefono) {
       errorMsg.textContent = 'Por favor completa todos los campos.';
       return;
     }
 
-    // 1️⃣ Crear usuario en Auth
     const { data: dataAuth, error: errorAuth } = await supabase.auth.signUp({
       email: correo,
       password: password,
@@ -57,18 +57,16 @@ export function mostrarRegistro() {
       return;
     }
 
-    // 2️⃣ Insertar en tabla "estudiantes"
     const { error: errorInsert } = await supabase.from('estudiantes').insert([
       { id: uid, nombre, correo, telefono },
     ]);
 
     if (errorInsert) {
-      errorMsg.textContent =
-        'Error guardando datos del estudiante: ' + errorInsert.message;
+      errorMsg.textContent = 'Error guardando datos del estudiante: ' + errorInsert.message;
       return;
     }
 
     alert('✅ Registro exitoso. Ahora puedes iniciar sesión.');
-    // mostrarLogin();
+    mostrarLogin();
   });
 }
